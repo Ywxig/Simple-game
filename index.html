@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+
+        html, body {
+            background-color: black;
+            border: solid 1px;
+            border-radius: 10px;
+        }
+
+        button, table {
+            background-color: blueviolet;
+            color: azure;
+            border: solid 1px;
+            border-radius: 10px;
+        }
+
+        canvas {
+            background: #224;
+            display: block;
+            margin: 0 auto;
+        }
+
+        .left_button {
+            position: relative;
+            width: 397px;
+            height: 240px;
+
+            font-size: 46px;
+        }
+
+        .right_button {
+            width: 397px;
+            height: 240px;
+
+            font-size: 46px;
+        }
+
+    </style>
+</head>
+<body>
+    
+    <canvas id="myCanvas" width="810" height="1190" onclick="startGame();"></canvas>
+    <table border="1" align="center">
+        <tr>
+            <td> <button class="left_button" align="left" onclick="moveLeft();">left</button></td> <td><button class="right_button" align="right" onclick="moveRight();">Right</button></td>
+        </tr>
+    </table>
+    <div>
+       
+        
+    </div>
+    <script>
+        // js code here
+        // тут я обявил переменные дял игры
+        const canvas = document.getElementById("myCanvas");
+        const ctx = canvas.getContext("2d");
+        const widthImg = 256;
+        const heightImg = 256;
+
+        let cordX =0;
+        let cerdY = 854;
+        let cordY_Pers = cerdY + widthImg
+
+        let speed = 5;
+        let gose_speed = 0;
+
+        let is_start = false
+
+        let text_game_status = "";
+
+        let cordX_anemi = 0;
+        let cordY_anemi = 0;
+
+        let score = 0;
+
+        function moveLeft() {// движение в лево
+            cordX = 0
+        }
+        function moveRight() {// движение в право
+            cordX = 810 - widthImg
+        }
+
+        function gameOver() { // функция для поражения и вывода на экран текста с увидомлением
+            const canvas = document.getElementById("myCanvas");
+            const ctx = canvas.getContext("2d");
+            ctx.beginPath();
+
+            ctx.closePath();
+        }
+
+        function startGame() {// параша не рабочяя
+            is_start = true
+            score = 0
+            if (is_start == true) {
+                myInterval = setInterval(drow, 10);
+            }
+        }
+        function drow() {// главная функция для игры
+            if (cordY_anemi > 2340) {
+                r = Math.random() + 0.1;
+                if (r > 0.5) {
+                    cordY_anemi = 0;
+                    cordX_anemi = 0;
+                }
+                if (r < 0.5) {
+                    cordX_anemi = 810 - widthImg;
+                    cordY_anemi = 0;
+                }
+            }
+
+            else {
+                if (cerdY + widthImg <= cordY_anemi + widthImg) {
+                    if (cerdY + widthImg >= cordY_anemi) {
+                        score = score + 1;
+                        speed = speed + 0.01
+                        console.log(speed)
+                        if (cordX + widthImg == cordX_anemi + widthImg){
+                            console.log("Game Over");
+                            text_game_status = "Game Over";
+                            clearInterval(myInterval);
+                        }
+                    }
+                }
+
+                
+
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                
+                ctx.rect(cordX_anemi, cordY_anemi, widthImg, heightImg);
+                ctx.fillStyle = "#00FF00";
+                ctx.fill();            
+
+                
+                ctx.beginPath();
+                ctx.rect(cordX, cerdY, widthImg, heightImg);
+                ctx.fillStyle = "#FF0000";
+                ctx.fill();
+                    //pic  = new Image();
+                    //pic.src = 'http://habrahabr.ru/i/nocopypast.png';
+                    //ctx.drawImage(pic, cordX, 0);
+
+                ctx.font = "62px Verdana";
+                ctx.textAlign = "center";
+                ctx.fillText(text_game_status, 405, 550);
+
+                ctx.font = "32px Verdana";
+                ctx.textAlign = "center";
+                ctx.fillText(score, 240, 110);
+
+                ctx.font = "22px Verdana";
+                ctx.fillStyle = "#0000FF";
+                ctx.textAlign = "center";
+                ctx.fill()
+                ctx.fillText(speed, 680, 110);
+
+
+                ctx.closePath();
+                cordY_anemi = cordY_anemi + speed;
+                
+            }
+            
+        }
+        myInterval;
+
+
+    </script>
+
+</body>
+</html>
